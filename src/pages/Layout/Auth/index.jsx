@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
-export default function MainLayout() {
-
+export default function Auth() {
   const navigate = useNavigate();
-  const [showPage, setShowPage] = useState(false);
+  const [showPage, setShowPage] = useState(true)
 
   useEffect(() => {
     const checkAuth = () => {
@@ -35,11 +34,7 @@ export default function MainLayout() {
     checkAuth();
   }, [navigate]);
 
-  return (
-    <>
-      <div className="min-h-screen">
-        {showPage && <Outlet />}
-      </div>
-    </>
-  )
+  return <div className="min-h-screen flex flex-col justify-center items-center bg-[#FCFCFC]">
+    {showPage && <Outlet />}
+  </div>;
 }
