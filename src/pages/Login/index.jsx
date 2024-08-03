@@ -8,16 +8,26 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
 import KYP from "../../assets/img/encabezado.png";
 import { IconEye, IconEyeOff, IconExclamationCircleFilled } from "@tabler/icons-react";
 import { useState } from "react";
 import { useTitle } from "../../hooks";
 import { useForm } from "react-hook-form";
+import { login } from '../../api/auth/authService'
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   useTitle("KYPBioingeniería - Login");
 
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState(null);
 
   const {
     register,
@@ -25,8 +35,13 @@ export default function Login() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
+  const onSubmit = handleSubmit(async(data) => {
+    const meta = await login(data); 
+    if (meta.success) {
+      navigate('/')
+    } else {
+      setLoginError(meta.message)
+    }
   });
 
   const AlertLogin = (field) => {
@@ -44,7 +59,7 @@ export default function Login() {
       <div className="mb-5">
         <img src={KYP} alt="" className="w-[200px]" />
       </div>
-      <Card className="w-full max-w-sm">
+      <Card className="w-full max-w-sm mb-3">
         <form onSubmit={onSubmit}>
           <CardHeader>
             <CardTitle className="text-4xl text-center font-bold">
@@ -113,6 +128,15 @@ export default function Login() {
           </CardFooter>
         </form>
       </Card>
+      {loginError &&  
+        <Alert variant="destructive" className="md:w-[380px] w-[350px] bg-red-500 text-white">
+          <IconExclamationCircleFilled color="#fff"/>
+          <AlertTitle className="ms-2">Error</AlertTitle>
+          <AlertDescription className="ms-2">
+            {loginError}
+          </AlertDescription>
+        </Alert>
+      }
     </>
   );
 }

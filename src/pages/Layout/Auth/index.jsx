@@ -34,7 +34,7 @@ export default function Auth() {
     checkAuth();
   }, [navigate]);
 
-  return <div className="min-h-screen flex flex-col justify-center items-center bg-[#FCFCFC]">
+  return <div className="min-h-screen flex flex-col justify-center items-center p-4 bg-[#FCFCFC]">
     {showPage && <Outlet />}
   </div>;
 }
