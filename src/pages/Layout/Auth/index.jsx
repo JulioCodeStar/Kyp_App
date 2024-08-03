@@ -22,6 +22,8 @@ export default function Auth() {
           localStorage.removeItem('accessToken');
           localStorage.removeItem('refreshToken');
           navigate('/login');
+        } else if (tokenExp > currentTime) {
+          navigate('/');
         } else {
           setShowPage(true);
         }

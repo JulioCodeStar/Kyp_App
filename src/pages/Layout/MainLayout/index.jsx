@@ -23,6 +23,9 @@ export default function MainLayout() {
           localStorage.removeItem('accessToken');
           localStorage.removeItem('refreshToken');
           navigate('/login');
+        } else if (tokenExp > currentTime) {
+          navigate('/');
+          setShowPage(true);
         } else {
           setShowPage(true);
         }
