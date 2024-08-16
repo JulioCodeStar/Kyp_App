@@ -1,5 +1,10 @@
-export default function header() {
+import { Navbar } from '../Sidebar/navbar'
+
+export default function header({children}) {
   return (
-    <div>header</div>
+    <div>
+      <Navbar/>
+      <div className="container pt-8 pb-8 px-4 sm:px-8">{children}</div>
+    </div>
   )
 }

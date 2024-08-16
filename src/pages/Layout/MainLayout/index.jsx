@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import {Header, Sidebar} from '../../../components/LayoutComponents/'
+import { Sidebar, Footer, Header } from "../../../components/LayoutComponents/";
+import { cn } from "../../../lib/utils";
+import { useStore } from "@/hooks/use-store";
+import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 
 export default function MainLayout() {
   const navigate = useNavigate();
@@ -38,21 +41,35 @@ export default function MainLayout() {
     checkAuth();
   }, [navigate]);
 
+  const sidebar = useStore(useSidebarToggle, (state) => state);
+
+  if (!sidebar) return null;
+
   return (
     <>
-      <div className="bg-[#FCFCFC] min-h-screen lg:flex">
-        {showPage && (
-          <>
-            <Sidebar />
-            <div className="flex flex-col flex-1">
-              <Header />
-              <div className="px-8 pt-4 h-screen">
-                <Outlet />
-              </div>
-            </div>
-          </>
-        )}
-      </div>
+      {showPage && (
+        <>
+          <Sidebar />
+          <main
+            className={cn(
+              "min-h-[calc(100vh_-_56px)] bg-zinc-50 dark:bg-zinc-900 transition-[margin-left] ease-in-out duration-300",
+              sidebar?.isOpen === false ? "lg:ml-[90px]" : "lg:ml-[256px]"
+            )}
+          >
+            <Header>
+              <Outlet />
+            </Header>
+          </main>
+          <footer
+            className={cn(
+              "transition-[margin-left] ease-in-out duration-300",
+              sidebar?.isOpen === false ? "lg:ml-[90px]" : "lg:ml-[256px]"
+            )}
+          >
+           <Footer /> 
+          </footer>
+        </>
+      )}
     </>
   );
 }
