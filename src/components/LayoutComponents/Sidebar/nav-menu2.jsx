@@ -1,23 +1,8 @@
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-} from "@/components/ui/navigation-menu";
-import {
   Menubar,
-  MenubarCheckboxItem,
   MenubarContent,
   MenubarItem,
   MenubarMenu,
-  MenubarRadioGroup,
-  MenubarRadioItem,
-  MenubarSeparator,
-  MenubarShortcut,
   MenubarSub,
   MenubarSubContent,
   MenubarSubTrigger,
@@ -25,7 +10,7 @@ import {
 } from "@/components/ui/menubar";
 import { useLocation, Link } from "react-router-dom";
 import { getMenuList } from "@/lib/menu-list";
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 export function NavMenu2() {
   const location = useLocation();
@@ -33,94 +18,54 @@ export function NavMenu2() {
   const menuList = getMenuList(pathname);
 
   return (
-    <Menubar>
-      {menuList.map(({ groupLabel, menus }, index) => (
-        <MenubarMenu key={index} >
-          {groupLabel && <MenubarTrigger className={cn("cursor-pointer")}>{groupLabel}</MenubarTrigger>}
+    <Menubar className={cn("bg-transparent")}>
+      {menuList.map(({ groupLabel, menus }, groupIndex) => (
+        <MenubarMenu key={groupIndex}>
+          {groupLabel && (
+            <MenubarTrigger className={cn("cursor-pointer")}>
+              {groupLabel}
+            </MenubarTrigger>
+          )}
           <MenubarContent>
-            <MenubarItem>
-              New Tab <MenubarShortcut>⌘T</MenubarShortcut>
-            </MenubarItem>
-            <MenubarItem>
-              New Window <MenubarShortcut>⌘N</MenubarShortcut>
-            </MenubarItem>
-            <MenubarItem disabled>New Incognito Window</MenubarItem>
-            <MenubarSeparator />
-            <MenubarSub>
-              <MenubarSubTrigger>Share</MenubarSubTrigger>
-              <MenubarSubContent>
-                <MenubarItem>Email link</MenubarItem>
-                <MenubarItem>Messages</MenubarItem>
-                <MenubarItem>Notes</MenubarItem>
-              </MenubarSubContent>
-            </MenubarSub>
-            <MenubarSeparator />
-            <MenubarItem>
-              Print... <MenubarShortcut>⌘P</MenubarShortcut>
-            </MenubarItem>
+            {menus.map(
+              ({ href, label, icon: Icon, active, submenus }, menuIndex) => (
+                <div key={menuIndex}>
+                  {submenus.length > 0 ? (
+                    <MenubarSub>
+                      <MenubarSubTrigger>
+                        {Icon && <Icon size={12} className="mr-2" />}
+                        {label}
+                      </MenubarSubTrigger>
+                      <MenubarSubContent>
+                        {submenus.map((submenu, subIndex) => (
+                          <Link key={subIndex} to={submenu.href}>
+                          <MenubarItem
+                            as="a"
+                            className={cn({ 'font-bold': submenu.active })}
+                          >
+                            {submenu.label}
+                          </MenubarItem>
+                         </Link> 
+                        ))}
+                      </MenubarSubContent>
+                    </MenubarSub>
+                  ) : (
+                    <Link to={href}>
+                      <MenubarItem
+                        as="a"
+                        className={cn({ 'font-bold': active })}
+                      >
+                        {Icon && <Icon className="mr-2" size={12} />}
+                        {label}
+                      </MenubarItem>
+                    </Link>
+                  )}
+                </div>
+              )
+            )}
           </MenubarContent>
         </MenubarMenu>
       ))}
-      {/* <MenubarMenu>
-        <MenubarTrigger>Edit</MenubarTrigger>
-        <MenubarContent>
-          <MenubarItem>
-            Undo <MenubarShortcut>⌘Z</MenubarShortcut>
-          </MenubarItem>
-          <MenubarItem>
-            Redo <MenubarShortcut>⇧⌘Z</MenubarShortcut>
-          </MenubarItem>
-          <MenubarSeparator />
-          <MenubarSub>
-            <MenubarSubTrigger>Find</MenubarSubTrigger>
-            <MenubarSubContent>
-              <MenubarItem>Search the web</MenubarItem>
-              <MenubarSeparator />
-              <MenubarItem>Find...</MenubarItem>
-              <MenubarItem>Find Next</MenubarItem>
-              <MenubarItem>Find Previous</MenubarItem>
-            </MenubarSubContent>
-          </MenubarSub>
-          <MenubarSeparator />
-          <MenubarItem>Cut</MenubarItem>
-          <MenubarItem>Copy</MenubarItem>
-          <MenubarItem>Paste</MenubarItem>
-        </MenubarContent>
-      </MenubarMenu>
-      <MenubarMenu>
-        <MenubarTrigger>View</MenubarTrigger>
-        <MenubarContent>
-          <MenubarCheckboxItem>Always Show Bookmarks Bar</MenubarCheckboxItem>
-          <MenubarCheckboxItem checked>
-            Always Show Full URLs
-          </MenubarCheckboxItem>
-          <MenubarSeparator />
-          <MenubarItem inset>
-            Reload <MenubarShortcut>⌘R</MenubarShortcut>
-          </MenubarItem>
-          <MenubarItem disabled inset>
-            Force Reload <MenubarShortcut>⇧⌘R</MenubarShortcut>
-          </MenubarItem>
-          <MenubarSeparator />
-          <MenubarItem inset>Toggle Fullscreen</MenubarItem>
-          <MenubarSeparator />
-          <MenubarItem inset>Hide Sidebar</MenubarItem>
-        </MenubarContent>
-      </MenubarMenu>
-      <MenubarMenu>
-        <MenubarTrigger>Profiles</MenubarTrigger>
-        <MenubarContent>
-          <MenubarRadioGroup value="benoit">
-            <MenubarRadioItem value="andy">Andy</MenubarRadioItem>
-            <MenubarRadioItem value="benoit">Benoit</MenubarRadioItem>
-            <MenubarRadioItem value="Luis">Luis</MenubarRadioItem>
-          </MenubarRadioGroup>
-          <MenubarSeparator />
-          <MenubarItem inset>Edit...</MenubarItem>
-          <MenubarSeparator />
-          <MenubarItem inset>Add Profile...</MenubarItem>
-        </MenubarContent>
-      </MenubarMenu> */}
     </Menubar>
   );
 }

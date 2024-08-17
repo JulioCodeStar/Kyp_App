@@ -11,7 +11,7 @@ import {
 import { useLocation, Link } from 'react-router-dom';
 import { getMenuList } from "@/lib/menu-list";
 import { CollapseMenuButton } from './collapse-menu-button'
-import { IconLogout2 , IconDots} from "@tabler/icons-react";
+import { IconFileOrientation , IconDots} from "@tabler/icons-react";
 
 export function Menu({ isOpen }) {
 
@@ -104,11 +104,10 @@ export function Menu({ isOpen }) {
                 <TooltipTrigger asChild>
                   <Button
                     onClick={() => {}}
-                    variant="outline"
                     className="w-full justify-center h-10 mt-5"
                   >
                     <span className={cn(isOpen === false ? "" : "mr-4")}>
-                      <IconLogout2 size={18} />
+                      <IconFileOrientation size={18} />
                     </span>
                     <p
                       className={cn(
@@ -116,7 +115,7 @@ export function Menu({ isOpen }) {
                         isOpen === false ? "opacity-0 hidden" : "opacity-100"
                       )}
                     >
-                      Sign out
+                      Documentación
                     </p>
                   </Button>
                 </TooltipTrigger>
