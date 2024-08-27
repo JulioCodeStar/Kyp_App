@@ -9,19 +9,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-} from "@/components/ui/command";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Calendar } from "@/components/ui/calendar";
-import { Badge } from "@/components/ui/badge";
-import { IconFilterFilled } from "@tabler/icons-react";
+import { IconCalendarMonth } from "@tabler/icons-react";
+import { DatatableFilter } from "./datatable-filter";
 
 export function DataTableToolbar({ table, filterFields = [] }) {
   const isFiltered = table.getState().columnFilters.length > 0;
@@ -56,228 +46,31 @@ export function DataTableToolbar({ table, filterFields = [] }) {
                   className="h-9 w-40 lg:w-64"
                 />
               )
-          )}
+        )}
+        {filterableColumns.length > 0 && 
+          filterableColumns.map((column) => (
+            table.getColumn(column.value ? String(column.value) : "") && (
+              <DatatableFilter
+                  key={String(column.value)}
+                  column={table.getColumn(
+                    column.value ? String(column.value) : ""
+                  )}
+                  title={column.label}
+                  options={column.options ?? []}
+                />
+            )
+          )
+        )}
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" size="sm" className="h-8 border-dashed">
-              <IconFilterFilled className="mr-2 size-4" />
-              Filtrar por Sede
-              {/* {statusFilter.length > 0 && (
-              <Badge variant="secondary" className="ml-2">
-                {statusFilter.length}
-              </Badge>
-            )} */}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-[12.5rem] p-0" align="start">
-            <Command>
-              <CommandInput placeholder={"Sede"} />
-              <CommandList>
-                <CommandEmpty>No results found.</CommandEmpty>
-                <CommandGroup>
-                  <div className="space-y-2">
-                    {["Lima", "Arequipa", "Chiclayo"].map((status) => (
-                      <CommandItem key={status} className="flex items-center">
-                        <Checkbox
-                          id={status}
-                          // checked={statusFilter.includes(status)}
-                          // onCheckedChange={(checked) => {
-                          //   setStatusFilter(
-                          //     checked
-                          //       ? [...statusFilter, status]
-                          //       : statusFilter.filter((s) => s !== status)
-                          //   )
-                          // }}
-                        />
-                        <span className="ml-2">{status}</span>
-                      </CommandItem>
-                    ))}
-                  </div>
-                  {/* {options.map((option) => {
-                    const isSelected = selectedValues.has(option.value);
-
-                    return (
-                      <CommandItem
-                        key={option.value}
-                        onSelect={() => {
-                          if (isSelected) {
-                            selectedValues.delete(option.value);
-                          } else {
-                            selectedValues.add(option.value);
-                          }
-                          const filterValues = Array.from(selectedValues);
-                          column?.setFilterValue(
-                            filterValues.length ? filterValues : undefined
-                          );
-                        }}
-                      >
-                        <div
-                          className={cn(
-                            "mr-2 flex size-4 items-center justify-center rounded-sm border border-primary",
-                            isSelected
-                              ? "bg-primary text-primary-foreground"
-                              : "opacity-50 [&_svg]:invisible"
-                          )}
-                        >
-                          <CheckIcon className="size-4" aria-hidden="true" />
-                        </div>
-                        {option.icon && (
-                          <option.icon
-                            className="mr-2 size-4 text-muted-foreground"
-                            aria-hidden="true"
-                          />
-                        )}
-                        <span>{option.label}</span>
-                        {option.withCount &&
-                          column
-                            ?.getFacetedUniqueValues()
-                            ?.get(option.value) && (
-                            <span className="ml-auto flex size-4 items-center justify-center font-mono text-xs">
-                              {column
-                                ?.getFacetedUniqueValues()
-                                .get(option.value)}
-                            </span>
-                          )}
-                      </CommandItem>
-                    );
-                  })} */}
-                </CommandGroup>
-                {/* {selectedValues.size > 0 && (
-                  <>
-                    <CommandSeparator />
-                    <CommandGroup>
-                      <CommandItem
-                        onSelect={() => column?.setFilterValue(undefined)}
-                        className="justify-center text-center"
-                      >
-                        Clear filters
-                      </CommandItem>
-                    </CommandGroup>
-                  </>
-                )} */}
-              </CommandList>
-            </Command>
-          </PopoverContent>
-        </Popover>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="outline" size="sm" className="h-8 border-dashed">
-              <IconFilterFilled className="mr-2 size-4" />
-              Filtrar por Estado
-              {/* {priorityFilter.length > 0 && (
-              <Badge variant="secondary" className="ml-2">
-                {priorityFilter.length}
-              </Badge>
-            )} */}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-[12.5rem] p-0" align="start">
-            <Command>
-              <CommandInput placeholder={"Estados"} />
-              <CommandList>
-                <CommandEmpty>No results found.</CommandEmpty>
-                <CommandGroup>
-                  <div className="space-y-2">
-                    {[
-                      "Cotización",
-                      "Contrato",
-                      "Donación",
-                      "EsSalud",
-                      "Accesorios",
-                    ].map((priority) => (
-                      <CommandItem key={priority} className="flex items-center">
-                        <Checkbox
-                          id={priority}
-                          // checked={priorityFilter.includes(priority)}
-                          // onCheckedChange={(checked) => {
-                          //   setPriorityFilter(
-                          //     checked
-                          //       ? [...priorityFilter, priority]
-                          //       : priorityFilter.filter((p) => p !== priority)
-                          //   )
-                          // }}
-                        />
-                        <label htmlFor={priority} className="ml-2">
-                          {priority}
-                        </label>
-                      </CommandItem>
-                    ))}
-                  </div>
-                  {/* {options.map((option) => {
-                    const isSelected = selectedValues.has(option.value);
-                    return (
-                      <CommandItem
-                        key={option.value}
-                        onSelect={() => {
-                          if (isSelected) {
-                            selectedValues.delete(option.value);
-                          } else {
-                            selectedValues.add(option.value);
-                          }
-                          const filterValues = Array.from(selectedValues);
-                          column?.setFilterValue(
-                            filterValues.length ? filterValues : undefined
-                          );
-                        }}
-                      >
-                        <div
-                          className={cn(
-                            "mr-2 flex size-4 items-center justify-center rounded-sm border border-primary",
-                            isSelected
-                              ? "bg-primary text-primary-foreground"
-                              : "opacity-50 [&_svg]:invisible"
-                          )}
-                        >
-                          <CheckIcon className="size-4" aria-hidden="true" />
-                        </div>
-                        {option.icon && (
-                          <option.icon
-                            className="mr-2 size-4 text-muted-foreground"
-                            aria-hidden="true"
-                          />
-                        )}
-                        <span>{option.label}</span>
-                        {option.withCount &&
-                          column
-                            ?.getFacetedUniqueValues()
-                            ?.get(option.value) && (
-                            <span className="ml-auto flex size-4 items-center justify-center font-mono text-xs">
-                              {column
-                                ?.getFacetedUniqueValues()
-                                .get(option.value)}
-                            </span>
-                          )}
-                      </CommandItem>
-                    );
-                  })} */}
-                </CommandGroup>
-                {/* {selectedValues.size > 0 && (
-                  <>
-                    <CommandSeparator />
-                    <CommandGroup>
-                      <CommandItem
-                        onSelect={() => column?.setFilterValue(undefined)}
-                        className="justify-center text-center"
-                      >
-                        Clear filters
-                      </CommandItem>
-                    </CommandGroup>
-                  </>
-                )} */}
-              </CommandList>
-            </Command>
-          </PopoverContent>
-        </Popover>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="outline">
-              Filtrar por Fechas
-              {/* {dateFilter.from && (
-              <Badge variant="secondary" className="ml-2">
-                {format(dateFilter.from, 'MMM d')}
-                {dateFilter.to && ` - ${format(dateFilter.to, 'MMM d')}`}
-              </Badge>
-            )} */}
+            <Button
+              id="date"
+              variant={"outline"}
+              size="sm"
+              className={cn("justify-start text-left font-normal h-8 border-dashed")}
+            >
+              <IconCalendarMonth className="mr-2 h-4 w-4" />
+              Filtrar por Fecha
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
@@ -290,20 +83,6 @@ export function DataTableToolbar({ table, filterFields = [] }) {
             />
           </PopoverContent>
         </Popover>
-        {/* {filterableColumns.length > 0 &&
-          filterableColumns.map(
-            // (column) =>
-            //   table.getColumn(column.value ? String(column.value) : "") && (
-            //     <DataTableFacetedFilter
-            //       key={String(column.value)}
-            //       column={table.getColumn(
-            //         column.value ? String(column.value) : ""
-            //       )}
-            //       title={column.label}
-            //       options={column.options ?? []}
-            //     />
-            //   )
-          )} */}
         {isFiltered && (
           <Button
             aria-label="Reset filters"
