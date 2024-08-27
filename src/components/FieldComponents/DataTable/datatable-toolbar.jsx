@@ -10,8 +10,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { IconCalendarMonth } from "@tabler/icons-react";
+import { IconCalendarMonth, IconDownload } from "@tabler/icons-react";
 import { DatatableFilter } from "./datatable-filter";
+import { Label } from "@/components/ui/label";
 
 export function DataTableToolbar({ table, filterFields = [] }) {
   const isFiltered = table.getState().columnFilters.length > 0;
@@ -46,11 +47,12 @@ export function DataTableToolbar({ table, filterFields = [] }) {
                   className="h-9 w-40 lg:w-64"
                 />
               )
-        )}
-        {filterableColumns.length > 0 && 
-          filterableColumns.map((column) => (
-            table.getColumn(column.value ? String(column.value) : "") && (
-              <DatatableFilter
+          )}
+        {filterableColumns.length > 0 &&
+          filterableColumns.map(
+            (column) =>
+              table.getColumn(column.value ? String(column.value) : "") && (
+                <DatatableFilter
                   key={String(column.value)}
                   column={table.getColumn(
                     column.value ? String(column.value) : ""
@@ -58,16 +60,17 @@ export function DataTableToolbar({ table, filterFields = [] }) {
                   title={column.label}
                   options={column.options ?? []}
                 />
-            )
-          )
-        )}
+              )
+          )}
         <Popover>
           <PopoverTrigger asChild>
             <Button
               id="date"
               variant={"outline"}
               size="sm"
-              className={cn("justify-start text-left font-normal h-8 border-dashed")}
+              className={cn(
+                "justify-start text-left font-normal h-8 border-dashed"
+              )}
             >
               <IconCalendarMonth className="mr-2 h-4 w-4" />
               Filtrar por Fecha
@@ -95,6 +98,64 @@ export function DataTableToolbar({ table, filterFields = [] }) {
           </Button>
         )}
       </div>
+
+      {/* Exportar Datos */}
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            size="sm"
+            className={cn("h-8 border-dashed")}
+          >
+            <IconDownload className="mr-2 size-4" />
+            Exportar
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-80" align="end">
+          <div className="grid gap-4">
+            <div className="space-y-2">
+              <h4 className="font-medium leading-none">Dimensions</h4>
+              <p className="text-sm text-muted-foreground">
+                Set the dimensions for the layer.
+              </p>
+            </div>
+            <div className="grid gap-2">
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label htmlFor="width">Width</Label>
+                <Input
+                  id="width"
+                  defaultValue="100%"
+                  className="col-span-2 h-8"
+                />
+              </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label htmlFor="maxWidth">Max. width</Label>
+                <Input
+                  id="maxWidth"
+                  defaultValue="300px"
+                  className="col-span-2 h-8"
+                />
+              </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label htmlFor="height">Height</Label>
+                <Input
+                  id="height"
+                  defaultValue="25px"
+                  className="col-span-2 h-8"
+                />
+              </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label htmlFor="maxHeight">Max. height</Label>
+                <Input
+                  id="maxHeight"
+                  defaultValue="none"
+                  className="col-span-2 h-8"
+                />
+              </div>
+            </div>
+          </div>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }
