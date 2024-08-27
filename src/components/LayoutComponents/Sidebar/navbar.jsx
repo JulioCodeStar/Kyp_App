@@ -6,7 +6,7 @@ import { NavMenu2 } from '../Sidebar/nav-menu2';
 
 export function Navbar() {
   return (
-    <header className="sticky top-0 z-10 w-full">
+    <header className="sticky top-0 z-10 w-full bg-white shadow-md">
       <div className="mx-4 sm:mx-8 flex h-[60px] items-center">
         <div className="flex items-center space-x-4 lg:space-x-0">
           <SheetMenu />

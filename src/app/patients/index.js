@@ -1,0 +1,1 @@
+export { default as DataTablePatients } from './_components'

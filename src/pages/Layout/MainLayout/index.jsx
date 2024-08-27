@@ -27,7 +27,8 @@ export default function MainLayout() {
           localStorage.removeItem("refreshToken");
           navigate("/login");
         } else if (tokenExp > currentTime) {
-          navigate("/");
+          const currentPathname = window.location.pathname;
+          navigate(currentPathname);
           setShowPage(true);
         } else {
           setShowPage(true);
