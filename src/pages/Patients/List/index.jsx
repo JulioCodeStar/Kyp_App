@@ -4,12 +4,27 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { IconCirclePlusFilled } from "@tabler/icons-react";
 import { DataTablePatients } from "@/app/patients";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RegisterModalPatient } from "@/components/LayoutComponents/Patients/register-modal-patient";
+import useGetAllPatients from "@/hooks/patients";
+
+import { Toaster } from "sonner";
 
 export default function index() {
+  const [showRegisterPatient, setShowRegisterPatient] = useState(false);
+  const [ data, setData ] = useState([]);
+  const { dataPatients } = useGetAllPatients();
 
-  const [ showRegisterPatient, setShowRegisterPatient ] = useState(false);
+  // Función para cargar los datos
+  const loadData = async () => {
+    const result = await dataPatients();
+    setData(result.data);
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
 
   return (
     <>
@@ -20,16 +35,21 @@ export default function index() {
             Pacientes - Gestión de Pacientes
           </p>
         </div>
-        <RegisterModalPatient open={showRegisterPatient} setOpen={setShowRegisterPatient} />
-        <Button 
-          className={cn("bg-blue-600 hover:bg-blue-500")} 
+        <RegisterModalPatient
+          open={showRegisterPatient}
+          setOpen={setShowRegisterPatient}
+          onPatientRegistered={loadData}
+        />
+        <Button
+          className={cn("bg-blue-600 hover:bg-blue-500")}
           onClick={() => setShowRegisterPatient(true)}
         >
           <IconCirclePlusFilled className="mr-2" />
           Agregar
         </Button>
       </div>
-      <DataTablePatients />
+      <DataTablePatients data={data} />
+      <Toaster position="top-right" richColors closeButton />
     </>
   );
 }

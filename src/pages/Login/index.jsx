@@ -18,7 +18,7 @@ import { IconEye, IconEyeOff, IconExclamationCircleFilled } from "@tabler/icons-
 import { useState } from "react";
 import { useTitle } from "../../hooks";
 import { useForm } from "react-hook-form";
-import { login } from '../../api/auth/authService'
+import { login } from '../../api/auth/authService';
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {

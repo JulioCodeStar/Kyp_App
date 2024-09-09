@@ -15,13 +15,10 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuLabel
+  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -29,7 +26,7 @@ import {
 } from "@radix-ui/react-icons";
 import { MoreHorizontal } from "lucide-react";
 
-export function DataTable({ table, children, titleSData }) {
+export function DataTable({ table, children, titleSData, dropdownActions }) {
   return (
     <Card>
       <CardContent>
@@ -118,18 +115,19 @@ export function DataTable({ table, children, titleSData }) {
           </TableHeader>
           <TableBody className={cn("font-medium")}>
             {table.getRowModel()?.rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id} className={cn("h-[50px]")}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.column.id} >
-                        <div>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </div>
-                      </TableCell>
-                    ))}
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id} className={cn("h-[50px]")}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.column.id}>
+                      <div>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </div>
+                    </TableCell>
+                  ))}
+                  {dropdownActions && (
                     <TableCell className="sticky right-0 bg-background">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -139,22 +137,32 @@ export function DataTable({ table, children, titleSData }) {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
+                          {dropdownActions?.label && (
+                            <DropdownMenuLabel>
+                              {dropdownActions.label}
+                            </DropdownMenuLabel>
+                          )}
+                          {dropdownActions?.items?.map((item, index) => (
+                            <DropdownMenuItem
+                              key={index}
+                              onClick={() => item.action(row)}
+                            >
+                              {item.label}
+                            </DropdownMenuItem>
+                          ))}
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
-                  </TableRow>
-                ))
-            ): (
-              <TableRow>
-                  <TableCell colSpan={6} className="h-24 text-center">
-                    {titleSData}
-                  </TableCell>
+                  )}
                 </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={6} className="h-24 text-center">
+                  {titleSData}
+                </TableCell>
+              </TableRow>
             )}
-            
           </TableBody>
         </Table>
         <div className="flex flex-col gap-2.5 mt-4">

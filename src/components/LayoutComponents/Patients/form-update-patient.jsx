@@ -16,8 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Controller } from "react-hook-form";
 
-
-export function FormRegisterPatient({ form, onSubmit, className, children }) {
+export function FormUpdatePatient({ form, onSubmit, className, children }) {
 
   const { 
     formState: { errors },
